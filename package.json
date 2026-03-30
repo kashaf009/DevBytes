@@ -1,0 +1,22 @@
+{
+  "name": "devbytes",
+  "version": "1.0.0",
+  "description": "social media for developers",
+  "keywords": [
+    "nodejs",
+    "backend",
+    "devbytes",
+    "dev",
+    "community"
+  ],
+  "license": "ISC",
+  "author": "kashaf khan",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}

@@ -6,16 +6,16 @@ const App = express();
 
 const user = userModel;
 
-App.post("/signup", async (req, res) => {
-  const User = new user({
-    firstName: "Kashaf",
-    lastName: "Khan",
-    emailId: "kashaf@gmail.com",
-    password: "kashaf123@",
-  });
+App.use(express.json());
 
-  await User.save();
-  res.send("user added successfully")
+App.post("/signup", async (req, res) => {
+  const User = new user(req.body);
+  try {
+    await User.save();
+    res.send("user added successfully");
+  } catch (error) {
+    res.status(400).send("error:" + error.message);
+  }
 });
 
 connectDB()
@@ -25,6 +25,6 @@ connectDB()
       console.log("successfully listened to port no. 7777");
     });
   })
-  .catch(() => {
-    console.error("connot connect ");
+  .catch((err) => {
+    console.error(err);
   });

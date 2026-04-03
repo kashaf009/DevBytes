@@ -8,6 +8,8 @@ const user = userModel;
 
 App.use(express.json());
 
+// post signup
+
 App.post("/signup", async (req, res) => {
   const User = new user(req.body);
   try {
@@ -15,6 +17,37 @@ App.post("/signup", async (req, res) => {
     res.send("user added successfully");
   } catch (error) {
     res.status(400).send("error:" + error.message);
+  }
+});
+
+// get user
+
+App.get("/user", async (req, res) => {
+  const userEmail = req.body.emailId;
+  try {
+    const userinfo = await user.find({ emailId: userEmail });
+
+    if (userinfo.length === 0) {
+      res.status(404).send("user not found");
+    } else {
+      res.send(userinfo);
+
+      console.log("finding successfull");
+    }
+  } catch (error) {
+    res.status(400).send("something went wrong");
+  }
+});
+
+
+// get feed
+
+App.get("/feed", async (req, res) => {
+  try {
+    const feedUser = await user.find({});
+    res.send(feedUser);
+  } catch (error) {
+    res.status(404).send("something wend wrong");
   }
 });
 

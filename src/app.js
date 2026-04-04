@@ -12,11 +12,27 @@ App.use(express.json());
 
 App.post("/signup", async (req, res) => {
   const User = new user(req.body);
+  const existingUser = await user.findOne({ emailId: req.body.emailId });
+
+
+
   try {
+    if(existingUser){
+      res.send("user already exist")
+    }
+    else{
+    
     await User.save();
-    res.send("user added successfully");
+    res.send("user added successfully");}
+  
+  
   } catch (error) {
-    res.status(400).send("error:" + error.message);
+
+    if(error.code === 11000){
+      res.status(404).send("email already exist")
+    }
+    else{
+    res.status(400).send("error:" + error.message);}
   }
 });
 
@@ -93,7 +109,7 @@ App.patch("/user/email", async (req, res) => {
     const findUser = await user.findOne({ emailId: emailId });
 
     if(!findUser){
-      res.send("no user found with this email")
+      res.send("no user found with this")
     }
 
     const updateUser = await user.findOneAndUpdate(findUser, data, {
@@ -102,7 +118,7 @@ App.patch("/user/email", async (req, res) => {
 
     console.log(updateUser);
 
-    res.send("user updated :" + updateUser);
+    res.send("user updated " + updateUser);
   } catch (error) {
     res.status(404).send("something went wrong");
   }

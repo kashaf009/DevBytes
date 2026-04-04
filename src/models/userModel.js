@@ -12,7 +12,8 @@ const userSchema= new mongoose.Schema({
     emailId: {
         type:String,
         required:true,
-        lowercase:true
+        unique: true,
+        lowercase:true,
     },  
     password: {
         type:String,
@@ -34,6 +35,7 @@ const userSchema= new mongoose.Schema({
     },
     about:{
         type:String,
+        default:"hey,welcome to my profile."
     }
 
 })

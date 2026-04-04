@@ -89,6 +89,7 @@ App.patch("/user", async (req, res) => {
   try {
     const updateUser = await user.findByIdAndUpdate({ _id: userId }, data, {
       returnDocument: "after",
+      runvalidator: true,
     });
     res.send("user updated successfully" + updateUser);
     console.log(updateUser);
@@ -114,6 +115,7 @@ App.patch("/user/email", async (req, res) => {
 
     const updateUser = await user.findOneAndUpdate(findUser, data, {
       returnDocument: "after",
+      runValidators:true
     });
 
     console.log(updateUser);

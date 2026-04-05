@@ -17,10 +17,21 @@ App.post("/signup", async (req, res) => {
 
 
   try {
+      
+
     if(existingUser){
       res.send("user already exist")
     }
     else{
+      
+      if(User?.skills.length > 10){
+      throw new Error("Skills cannot be more than 10");
+      
+    }
+    if(User?.about.length > 60){
+      throw new Error("about should be in less than 60 words");
+      
+    }
     
     await User.save();
     res.send("user added successfully");}
@@ -87,16 +98,35 @@ App.patch("/user", async (req, res) => {
   // console.log(data);
 
   try {
+    const allowedUpdate= [ "userId","photoUrl","about","skills","gender"]
+
+    const validateUpdate = Object.keys(data).every((k)=> allowedUpdate.includes(k))
+
+    if(!validateUpdate){
+      throw new Error("update not allowed");
+    
+    }
+
+    if(data?.skills.length > 10){
+      throw new Error("Skills cannot be more than 10");
+      
+    }
+    if(data?.about.length > 60){
+      throw new Error("about should be in less than 60 words");
+      
+    }
+
+
     const updateUser = await user.findByIdAndUpdate({ _id: userId }, data, {
       returnDocument: "after",
       runvalidator: true,
     });
-    res.send("user updated successfully" + updateUser);
+    res.send("user updated successfully");
     console.log(updateUser);
 
     // console.log("updated user");
   } catch (error) {
-    res.status(404).send("something went wrong");
+    res.status(404).send("something went wrong:" + error.message);
   }
 });
 
@@ -107,6 +137,25 @@ App.patch("/user/email", async (req, res) => {
   const data = req.body;
 
   try {
+    const allowedUpdate= ["photoUrl","about","skills","gender"]
+
+    const validateUpdate = Object.keys(data).every((k)=> allowedUpdate.includes(k))
+
+    if(!validateUpdate){
+      throw new Error("update not allowed")
+    }
+
+    if(data?.skills.length > 10){
+      throw new Error("Skills cannot be more than 10");
+      
+    }
+
+    if(data?.about.length > 60){
+      throw new Error("about should be in less than 60 words");
+      
+    }
+
+
     const findUser = await user.findOne({ emailId: emailId });
 
     if(!findUser){
@@ -122,7 +171,7 @@ App.patch("/user/email", async (req, res) => {
 
     res.send("user updated " + updateUser);
   } catch (error) {
-    res.status(404).send("something went wrong");
+    res.status(404).send("something went wrong :" + error.message);
   }
 });
 

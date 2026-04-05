@@ -23,6 +23,7 @@ const userSchema= new mongoose.Schema({
     password: {
         type:String,
         minLength:8,
+        maxLength:18,
         required:true
     },
     age: {
@@ -33,7 +34,7 @@ const userSchema= new mongoose.Schema({
         type:String,
         validate(value){
             if (!["male","female"].includes(value)) {
-                throw console.error("gender is invalid");
+                throw new Error("gender is invalid");
             }
         }
     },
@@ -43,10 +44,12 @@ const userSchema= new mongoose.Schema({
     },
     skills:{
         type:[String],
+        
 
     },
     about:{
         type:String,
+        maxLength:60,
         default:"hey,welcome to my profile."
     }
 

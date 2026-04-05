@@ -1,7 +1,7 @@
 import express from "express";
 import connectDB from "./config/database.js";
 import userModel from "./models/userModel.js";
-import validator from "validator"
+import validator from "validator";
 
 const App = express();
 
@@ -15,38 +15,26 @@ App.post("/signup", async (req, res) => {
   const User = new user(req.body);
   const existingUser = await user.findOne({ emailId: req.body.emailId });
 
-
-
   try {
-      
+    if (existingUser) {
+      res.send("user already exist");
+    } else {
+      if (User?.skills.length > 10) {
+        throw new Error("Skills cannot be more than 10");
+      }
+      if (User?.about.length > 60) {
+        throw new Error("about should be in less than 60 words");
+      }
 
-    if(existingUser){
-      res.send("user already exist")
+      await User.save();
+      res.send("user added successfully");
     }
-
-    else{
-       
-      
-      if(User?.skills.length > 10){
-      throw new Error("Skills cannot be more than 10");
-      
-    }
-    if(User?.about.length > 60){
-      throw new Error("about should be in less than 60 words");
-      
-    }
-    
-    await User.save();
-    res.send("user added successfully");}
-  
-  
   } catch (error) {
-
-    if(error.code === 11000){
-      res.status(404).send("email already exist")
+    if (error.code === 11000) {
+      res.status(404).send("email already exist");
+    } else {
+      res.status(400).send("error:" + error.message);
     }
-    else{
-    res.status(400).send("error:" + error.message);}
   }
 });
 
@@ -101,24 +89,22 @@ App.patch("/user", async (req, res) => {
   // console.log(data);
 
   try {
-    const allowedUpdate= [ "userId","photoUrl","about","skills","gender"]
+    const allowedUpdate = ["userId", "photoUrl", "about", "skills", "gender"];
 
-    const validateUpdate = Object.keys(data).every((k)=> allowedUpdate.includes(k))
+    const validateUpdate = Object.keys(data).every((k) =>
+      allowedUpdate.includes(k),
+    );
 
-    if(!validateUpdate){
+    if (!validateUpdate) {
       throw new Error("update not allowed");
-    
     }
 
-    if(data?.skills.length > 10){
+    if (data?.skills.length > 10) {
       throw new Error("Skills cannot be more than 10");
-      
     }
-    if(data?.about.length > 60){
+    if (data?.about.length > 60) {
       throw new Error("about should be in less than 60 words");
-      
     }
-
 
     const updateUser = await user.findByIdAndUpdate({ _id: userId }, data, {
       returnDocument: "after",
@@ -140,34 +126,33 @@ App.patch("/user/email", async (req, res) => {
   const data = req.body;
 
   try {
-    const allowedUpdate= ["photoUrl","about","skills","gender"]
+    const allowedUpdate = ["photoUrl", "about", "skills", "gender"];
 
-    const validateUpdate = Object.keys(data).every((k)=> allowedUpdate.includes(k))
+    const validateUpdate = Object.keys(data).every((k) =>
+      allowedUpdate.includes(k),
+    );
 
-    if(!validateUpdate){
-      throw new Error("update not allowed")
+    if (!validateUpdate) {
+      throw new Error("update not allowed");
     }
 
-    if(data?.skills.length > 10){
+    if (data?.skills.length > 10) {
       throw new Error("Skills cannot be more than 10");
-      
     }
 
-    if(data?.about.length > 60){
+    if (data?.about.length > 60) {
       throw new Error("about should be in less than 60 words");
-      
     }
-
 
     const findUser = await user.findOne({ emailId: emailId });
 
-    if(!findUser){
-      res.send("no user found with this")
+    if (!findUser) {
+      res.send("no user found with this");
     }
 
     const updateUser = await user.findOneAndUpdate(findUser, data, {
       returnDocument: "after",
-      runValidators:true
+      runValidators: true,
     });
 
     console.log(updateUser);

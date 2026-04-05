@@ -1,6 +1,7 @@
 import express from "express";
 import connectDB from "./config/database.js";
 import userModel from "./models/userModel.js";
+import validator from "validator"
 
 const App = express();
 
@@ -22,7 +23,9 @@ App.post("/signup", async (req, res) => {
     if(existingUser){
       res.send("user already exist")
     }
+
     else{
+       
       
       if(User?.skills.length > 10){
       throw new Error("Skills cannot be more than 10");

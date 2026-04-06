@@ -22,9 +22,11 @@ App.post("/signup", async (req, res) => {
     const { firstName , lastName , emailId , password}= req.body
 
     // encrypt password
+    const passwordHash =  await bcrypt.hash(password,10)
 
 
-    const User = new user({firstName,lastName,emailId,password});
+
+    const User = new user({firstName,lastName,emailId,password:passwordHash});
     const existingUser = await user.findOne({ emailId: req.body.emailId });
 
     if (existingUser) {

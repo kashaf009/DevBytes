@@ -2,6 +2,8 @@ import express from "express";
 import connectDB from "./config/database.js";
 import userModel from "./models/userModel.js";
 import validator from "validator";
+import { validateSignup } from "./utils/validate.js";
+import bcrypt from "bcrypt"
 
 const App = express();
 
@@ -12,10 +14,19 @@ App.use(express.json());
 // post signup
 
 App.post("/signup", async (req, res) => {
-  const User = new user(req.body);
-  const existingUser = await user.findOne({ emailId: req.body.emailId });
-
   try {
+    // validate req.body
+    validateSignup(req);
+
+
+    const { firstName , lastName , emailId , password}= req.body
+
+    // encrypt password
+
+
+    const User = new user({firstName,lastName,emailId,password});
+    const existingUser = await user.findOne({ emailId: req.body.emailId });
+
     if (existingUser) {
       res.send("user already exist");
     } else {

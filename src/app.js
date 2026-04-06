@@ -3,7 +3,7 @@ import connectDB from "./config/database.js";
 import userModel from "./models/userModel.js";
 import validator from "validator";
 import { validateSignup } from "./utils/validate.js";
-import bcrypt from "bcrypt"
+import bcrypt from "bcrypt";
 
 const App = express();
 
@@ -18,15 +18,17 @@ App.post("/signup", async (req, res) => {
     // validate req.body
     validateSignup(req);
 
-
-    const { firstName , lastName , emailId , password}= req.body
+    const { firstName, lastName, emailId, password } = req.body;
 
     // encrypt password
-    const passwordHash =  await bcrypt.hash(password,10)
+    const passwordHash = await bcrypt.hash(password, 10);
 
-
-
-    const User = new user({firstName,lastName,emailId,password:passwordHash});
+    const User = new user({
+      firstName,
+      lastName,
+      emailId,
+      password: passwordHash,
+    });
     const existingUser = await user.findOne({ emailId: req.body.emailId });
 
     if (existingUser) {
@@ -48,6 +50,37 @@ App.post("/signup", async (req, res) => {
     } else {
       res.status(400).send("error:" + error.message);
     }
+  }
+});
+
+// login api
+
+App.post("/login", async (req, res) => {
+  try {
+    const { emailId, password } = req.body;
+    if (!emailId) {
+      throw new Error("Enter emailid");
+    }
+
+    const verifiedUser = await user.findOne({ emailId: emailId });
+
+    if (!verifiedUser) {
+      throw new Error("Invalid credential");
+    }
+
+    const verifyPass = await bcrypt.compare(
+      password,
+      verifiedUser.password,
+    );
+
+    if (verifyPass) {
+      res.send("login successful")
+    }else{
+      throw new Error("Invalid credential");
+      
+    }
+  } catch (error) {
+    res.status(404).send("Error:" + error.message);
   }
 });
 

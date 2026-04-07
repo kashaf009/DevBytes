@@ -5,16 +5,15 @@ import validator from "validator";
 import { validateSignup } from "./utils/validate.js";
 import bcrypt from "bcrypt";
 import cookieParser from "cookie-parser";
+import jwt from "jsonwebtoken";
+
 const App = express();
-
-
 
 const user = userModel;
 
-
 // parsers
 App.use(express.json());
-App.use(cookieParser())
+App.use(cookieParser());
 
 // post signup
 
@@ -73,25 +72,20 @@ App.post("/login", async (req, res) => {
       throw new Error("Invalid credential");
     }
 
-    const verifyPass = await bcrypt.compare(
-      password,
-      verifiedUser.password,
-    );
+    const verifyPass = await bcrypt.compare(password, verifiedUser.password);
 
     if (verifyPass) {
       // create jwt token
 
+      const token = jwt.sign({ _id: verifiedUser._id }, "Dev@Bytes@99$");
 
       // pass token in cookie
 
-      res.cookie("token", "kjkhdjhkj8jjedjedh");
+      res.cookie("token", token);
 
-
-
-      res.send("login successful")
-    }else{
+      res.send("login successful");
+    } else {
       throw new Error("Invalid");
-      
     }
   } catch (error) {
     res.status(404).send("Error:" + error.message);

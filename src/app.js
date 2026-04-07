@@ -77,7 +77,7 @@ App.post("/login", async (req, res) => {
     if (verifyPass) {
       // create jwt token
 
-      const token = jwt.sign({ _id: verifiedUser._id }, "Dev@Bytes@99$");
+      const token = await jwt.sign({ _id: verifiedUser._id }, "Dev@Bytes@99$");
 
       // pass token in cookie
 
@@ -87,6 +87,27 @@ App.post("/login", async (req, res) => {
     } else {
       throw new Error("Invalid");
     }
+  } catch (error) {
+    res.status(404).send("Error:" + error.message);
+  }
+});
+
+// profile api
+
+App.get("/profile", async (req, res) => {
+  try {
+    const cookies = await req.cookies;
+    const { token } = cookies;
+
+    const decodedValue = await jwt.verify(token, "Dev@Bytes@99$");
+
+    const { _id } = decodedValue;
+
+    const currentUser =await user.findById(_id)
+    const {firstName, lastName , emailId}= currentUser
+    
+
+    res.send("profile of:" + currentUser);
   } catch (error) {
     res.status(404).send("Error:" + error.message);
   }

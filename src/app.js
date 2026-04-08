@@ -78,11 +78,12 @@ App.post("/login", async (req, res) => {
     if (verifyPass) {
       // create jwt token
 
-      const token = await jwt.sign({ _id: verifiedUser._id }, "Dev@Bytes@99$" , {expiresIn:"7d"});
-
+      const token = await verifiedUser.getJWT();
       // pass token in cookie
 
       res.cookie("token", token);
+      
+      
 
       res.send("login successful");
     } else {
@@ -104,6 +105,8 @@ App.get("/profile", userAuth, async (req, res) => {
     res.status(404).send("Error:" + error.message);
   }
 });
+
+// sendconnectionrequest 
 
 App.post("/sendconnectionrequest" ,userAuth, async (req,res)=> {
   try {

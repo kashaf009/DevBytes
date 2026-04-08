@@ -6,6 +6,7 @@ import { validateSignup } from "./utils/validate.js";
 import bcrypt from "bcrypt";
 import cookieParser from "cookie-parser";
 import jwt from "jsonwebtoken";
+import { userAuth } from "./middleware/auth.js";
 
 const App = express();
 
@@ -230,7 +231,7 @@ App.patch("/user/email", async (req, res) => {
       runValidators: true,
     });
 
-    console.log(updateUser);
+    // console.log(updateUser);
 
     res.send("user updated " + updateUser);
   } catch (error) {

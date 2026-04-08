@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import userModel from "../models/userModel";
+import userModel from "../models/userModel.js";
 
 const userAuth = async (req, res, next) => {
   // get token form cookies
@@ -19,6 +19,7 @@ const userAuth = async (req, res, next) => {
       throw new Error("user not found");
     }
 
+    req.user=user
     next();
 
   } catch (error) {

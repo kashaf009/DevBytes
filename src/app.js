@@ -78,7 +78,7 @@ App.post("/login", async (req, res) => {
     if (verifyPass) {
       // create jwt token
 
-      const token = await jwt.sign({ _id: verifiedUser._id }, "Dev@Bytes@99$");
+      const token = await jwt.sign({ _id: verifiedUser._id }, "Dev@Bytes@99$" , {expiresIn:"7d"});
 
       // pass token in cookie
 
@@ -95,149 +95,154 @@ App.post("/login", async (req, res) => {
 
 // profile api
 
-App.get("/profile", async (req, res) => {
+App.get("/profile", userAuth, async (req, res) => {
   try {
-    const cookies = await req.cookies;
-    const { token } = cookies;
+    const user = req.user;
 
-    const decodedValue = await jwt.verify(token, "Dev@Bytes@99$");
-
-    const { _id } = decodedValue;
-
-    const currentUser =await user.findById(_id)
-    const {firstName, lastName , emailId}= currentUser
-    
-
-    res.send("profile of:" + currentUser);
+    res.send("profile of:" + user);
   } catch (error) {
     res.status(404).send("Error:" + error.message);
   }
 });
 
+App.post("/sendconnectionrequest" ,userAuth, async (req,res)=> {
+  try {
+    const user=req.user;
+  
+    res.send( user.firstName + " send connection request")
+    
+  } catch (error) {
+    res.status(404).send("error:" + error.message)
+    
+  }
+  
+
+})
+
 // get user
 
-App.get("/user", async (req, res) => {
-  const userEmail = req.body.emailId;
-  try {
-    const userinfo = await user.find({ emailId: userEmail });
+// App.get("/user", async (req, res) => {
+//   const userEmail = req.body.emailId;
+//   try {
+//     const userinfo = await user.find({ emailId: userEmail });
 
-    if (userinfo.length === 0) {
-      res.status(404).send("user not found");
-    } else {
-      res.send(userinfo);
+//     if (userinfo.length === 0) {
+//       res.status(404).send("user not found");
+//     } else {
+//       res.send(userinfo);
 
-      console.log("finding successfull");
-    }
-  } catch (error) {
-    res.status(400).send("something went wrong");
-  }
-});
+//       console.log("finding successfull");
+//     }
+//   } catch (error) {
+//     res.status(400).send("something went wrong");
+//   }
+// });
 
 // get feed
 
-App.get("/feed", async (req, res) => {
-  try {
-    const feedUser = await user.find({});
-    res.send(feedUser);
-  } catch (error) {
-    res.status(404).send("something wend wrong");
-  }
-});
+// App.get("/feed", async (req, res) => {
+//   try {
+//     const feedUser = await user.find({});
+//     res.send(feedUser);
+//   } catch (error) {
+//     res.status(404).send("something wend wrong");
+//   }
+// });
 
 // delete user
 
-App.delete("/user", async (req, res) => {
-  const userId = req.body.userId;
-  try {
-    await user.findByIdAndDelete(userId);
-    res.send("delete user successfully");
-  } catch (error) {
-    res.status(404).send("something went wrong");
-  }
-});
+// App.delete("/user", async (req, res) => {
+//   const userId = req.body.userId;
+//   try {
+//     await user.findByIdAndDelete(userId);
+//     res.send("delete user successfully");
+//   } catch (error) {
+//     res.status(404).send("something went wrong");
+//   }
+// });
 
 // update user
 
-App.patch("/user", async (req, res) => {
-  const userId = req.body.userId;
-  const data = req.body;
-  // console.log(userId);
-  // console.log(data);
+// App.patch("/user", async (req, res) => {
+//   const userId = req.body.userId;
+//   const data = req.body;
+//   // console.log(userId);
+//   // console.log(data);
 
-  try {
-    const allowedUpdate = ["userId", "photoUrl", "about", "skills", "gender"];
+//   try {
+//     const allowedUpdate = ["userId", "photoUrl", "about", "skills", "gender"];
 
-    const validateUpdate = Object.keys(data).every((k) =>
-      allowedUpdate.includes(k),
-    );
+//     const validateUpdate = Object.keys(data).every((k) =>
+//       allowedUpdate.includes(k),
+//     );
 
-    if (!validateUpdate) {
-      throw new Error("update not allowed");
-    }
+//     if (!validateUpdate) {
+//       throw new Error("update not allowed");
+//     }
 
-    if (data?.skills.length > 10) {
-      throw new Error("Skills cannot be more than 10");
-    }
-    if (data?.about.length > 60) {
-      throw new Error("about should be in less than 60 words");
-    }
+//     if (data?.skills.length > 10) {
+//       throw new Error("Skills cannot be more than 10");
+//     }
+//     if (data?.about.length > 60) {
+//       throw new Error("about should be in less than 60 words");
+//     }
 
-    const updateUser = await user.findByIdAndUpdate({ _id: userId }, data, {
-      returnDocument: "after",
-      runvalidator: true,
-    });
-    res.send("user updated successfully");
-    console.log(updateUser);
+//     const updateUser = await user.findByIdAndUpdate({ _id: userId }, data, {
+//       returnDocument: "after",
+//       runvalidator: true,
+//     });
+//     res.send("user updated successfully");
+//     console.log(updateUser);
 
-    // console.log("updated user");
-  } catch (error) {
-    res.status(404).send("something went wrong:" + error.message);
-  }
-});
+//     // console.log("updated user");
+//   } catch (error) {
+//     res.status(404).send("something went wrong:" + error.message);
+//   }
+// });
 
 // update by emailId
 
-App.patch("/user/email", async (req, res) => {
-  const emailId = req.body.emailId;
-  const data = req.body;
+// App.patch("/user/email", async (req, res) => {
+//   const emailId = req.body.emailId;
+//   const data = req.body;
 
-  try {
-    const allowedUpdate = ["photoUrl", "about", "skills", "gender"];
+//   try {
+//     const allowedUpdate = ["photoUrl", "about", "skills", "gender"];
 
-    const validateUpdate = Object.keys(data).every((k) =>
-      allowedUpdate.includes(k),
-    );
+//     const validateUpdate = Object.keys(data).every((k) =>
+//       allowedUpdate.includes(k),
+//     );
 
-    if (!validateUpdate) {
-      throw new Error("update not allowed");
-    }
+//     if (!validateUpdate) {
+//       throw new Error("update not allowed");
+//     }
 
-    if (data?.skills.length > 10) {
-      throw new Error("Skills cannot be more than 10");
-    }
+//     if (data?.skills.length > 10) {
+//       throw new Error("Skills cannot be more than 10");
+//     }
 
-    if (data?.about.length > 60) {
-      throw new Error("about should be in less than 60 words");
-    }
+//     if (data?.about.length > 60) {
+//       throw new Error("about should be in less than 60 words");
+//     }
 
-    const findUser = await user.findOne({ emailId: emailId });
+//     const findUser = await user.findOne({ emailId: emailId });
 
-    if (!findUser) {
-      res.send("no user found with this");
-    }
+//     if (!findUser) {
+//       res.send("no user found with this");
+//     }
 
-    const updateUser = await user.findOneAndUpdate(findUser, data, {
-      returnDocument: "after",
-      runValidators: true,
-    });
+//     const updateUser = await user.findOneAndUpdate(findUser, data, {
+//       returnDocument: "after",
+//       runValidators: true,
+//     });
 
-    // console.log(updateUser);
+//     // console.log(updateUser);
 
-    res.send("user updated " + updateUser);
-  } catch (error) {
-    res.status(404).send("something went wrong :" + error.message);
-  }
-});
+//     res.send("user updated " + updateUser);
+//   } catch (error) {
+//     res.status(404).send("something went wrong :" + error.message);
+//   }
+// });
 
 connectDB()
   .then(() => {

@@ -28,6 +28,6 @@ const validateSignup = (req) => {
 
 }
 
-export {
+export default {
     validateSignup
 }

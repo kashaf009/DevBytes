@@ -27,11 +27,11 @@ profileRoutes.patch("/profile/edit",userAuth, async (req,res)=>{
           throw new Error("invalid edit request");
           
         }
-        console.log(loginedUser);
+        // console.log(loginedUser);
          
 
         Object.keys(req.body).forEach(keys=> loginedUser[keys] = req.body[keys])
-        console.log(loginedUser);
+        // console.log(loginedUser);
 
         loginedUser.save();
 

@@ -1,5 +1,5 @@
 import express from "express";
-import validateSignup from "../utils/validate.js";
+import {validateSignup} from "../utils/validate.js";
 import bcrypt from "bcrypt";
 import userModel from "../models/userModel.js";
 

@@ -1,11 +1,11 @@
 import express from "express";
-import  validateSignup  from "../utils/validate.js";
-import bcrypt from "bcrypt"
+import validateSignup from "../utils/validate.js";
+import bcrypt from "bcrypt";
 import userModel from "../models/userModel.js";
 
 const user = userModel;
 
-const authRoutes = express.Router()
+const authRoutes = express.Router();
 // signup
 authRoutes.post("/signup", async (req, res) => {
   try {
@@ -47,7 +47,6 @@ authRoutes.post("/signup", async (req, res) => {
   }
 });
 
-
 // login
 authRoutes.post("/login", async (req, res) => {
   try {
@@ -71,8 +70,6 @@ authRoutes.post("/login", async (req, res) => {
       // pass token in cookie
 
       res.cookie("token", token);
-      
-      
 
       res.send("login successful");
     } else {
@@ -83,7 +80,14 @@ authRoutes.post("/login", async (req, res) => {
   }
 });
 
+// logout
+authRoutes.post("/logout", async (req, res) => {
+  try {
+    res.cookie("token", null, { expires: new Date(Date.now()) });
+    res.send("logout successful");
+  } catch (error) {
+    res.status(404).send("Error:" + error.message);
+  }
+});
 
-export {
-    authRoutes
-}
+export { authRoutes };

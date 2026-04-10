@@ -35,7 +35,9 @@ profileRoutes.patch("/profile/edit", userAuth, async (req, res) => {
 
     loginedUser.save();
 
-    res.send(`${loginedUser.firstName}, your profile is updated successfully`);
+    res.json({ message:`${loginedUser.firstName}, your profile is updated successfully`,
+      user: loginedUser}
+    );
   } catch (error) {
     res.status(404).send("Error:" + error.message);
   }

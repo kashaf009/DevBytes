@@ -34,7 +34,7 @@ authRoutes.post("/signup", async (req, res) => {
       if (User?.about.length > 60) {
         throw new Error("about should be in less than 60 words");
       }
-
+      // save user
       await User.save();
       res.send("user added successfully");
     }

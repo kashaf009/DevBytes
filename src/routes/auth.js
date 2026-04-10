@@ -90,4 +90,5 @@ authRoutes.post("/logout", async (req, res) => {
   }
 });
 
+
 export { authRoutes };

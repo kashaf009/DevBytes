@@ -20,17 +20,16 @@ requestRoutes.post(
       }
 
       // bug fixed : cannot send request to yourself
-      if(fromUserId.equals(toUserId)){
+      if (fromUserId.equals(toUserId)) {
         throw new Error("You cannot send request to yourself");
       }
 
-      const toUser =await user.findById(toUserId)
-      if(!toUser){
+      const toUser = await user.findById(toUserId);
+      if (!toUser) {
         res.json({
-          message:"used does not exist", 
-          user :toUserId
-        })
-
+          message: "used does not exist",
+          user: toUserId,
+        });
       }
       const connections = new ConnectionRequest({
         fromUserId,
@@ -48,12 +47,18 @@ requestRoutes.post(
       if (!existingUser) {
         await connections.save();
       } else {
-        res.json({message :"Connection Request Already Exists"});
+        res.json({ message: "Connection Request Already Exists" });
       }
 
-      res.json({
-        message: "connection request sent successfully",
-      });
+      if (status === "requested") {
+        res.json({
+          message: `Connection request sent to ${toUser.firstName} successfully`,
+        });
+      } else if (status === "ignored") {
+        res.json({
+          message: req.user.firstName + " " + status + " " + toUser.firstName,
+        });
+      }
     } catch (error) {
       res.status(404).send("error:" + error.message);
     }

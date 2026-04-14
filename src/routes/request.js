@@ -1,7 +1,7 @@
 import express from "express";
 import { userAuth } from "../middleware/auth.js";
 import ConnectionRequest from "../models/connectionRequest.js";
-import userModel from "../models/userModel.js";
+import user from "../models/userModel.js";
 
 const requestRoutes = express.Router();
 
@@ -17,6 +17,15 @@ requestRoutes.post(
       const allowedStatus = ["ignored", "requested"];
       if (!allowedStatus.includes(status)) {
         throw new Error("Invalid Status ");
+      }
+
+      const toUser =await user.findById(toUserId)
+      if(!toUser){
+        res.json({
+          message:"used does not exist", 
+          user :toUserId
+        })
+
       }
       const connections = new ConnectionRequest({
         fromUserId,

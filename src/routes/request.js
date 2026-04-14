@@ -19,6 +19,11 @@ requestRoutes.post(
         throw new Error("Invalid Status ");
       }
 
+      // bug fixed : cannot send request to yourself
+      if(fromUserId.equals(toUserId)){
+        throw new Error("You cannot send request to yourself");
+      }
+
       const toUser =await user.findById(toUserId)
       if(!toUser){
         res.json({

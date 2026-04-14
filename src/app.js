@@ -5,6 +5,7 @@ import cookieParser from "cookie-parser";
 import { userAuth } from "./middleware/auth.js";
 import { authRoutes } from "./routes/auth.js";
 import { profileRoutes } from "./routes/profile.js";
+import { requestRoutes } from "./routes/request.js";
 
 const App = express();
 
@@ -13,10 +14,13 @@ const App = express();
 App.use(express.json());
 App.use(cookieParser());
 
+
+// routes
 App.use("/", authRoutes);
 App.use("/", profileRoutes);
+App.use("/", requestRoutes);
 
-// sendconnectionrequest
+
 
 
 

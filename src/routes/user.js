@@ -12,7 +12,7 @@ userRoutes.get("/user/request/recieved", userAuth, async (req, res) => {
     const requestData = await connectionRequest.find({
       toUserId: loginUser._id,
       status: "requested",
-    });
+    }).populate("fromUserId" , ["firstName" , "lastName"]);
 
     res.json({ message: "Data fetched sucessfully", data: requestData });
   } catch (error) {

@@ -92,7 +92,7 @@ userRoutes.get("/feed", userAuth, async (req, res) => {
       uniqueIds.add(data.toUserId._id.toString());
     });
 
-    console.log(uniqueIds);
+    // console.log(uniqueIds);
     
 
     const hideProfileData = await user.find({

@@ -7,10 +7,13 @@ import { authRoutes } from "./routes/auth.js";
 import { profileRoutes } from "./routes/profile.js";
 import { requestRoutes } from "./routes/request.js";
 import { userRoutes } from "./routes/user.js";
+import cors from "cors";
+
+
 
 const App = express();
 
-
+App.use(cors());
 // parsers
 App.use(express.json());
 App.use(cookieParser());

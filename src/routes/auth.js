@@ -71,7 +71,7 @@ authRoutes.post("/login", async (req, res) => {
 
       res.cookie("token", token);
 
-      res.send("login successful");
+      res.send(verifiedUser);
     } else {
       throw new Error("Invalid");
     }

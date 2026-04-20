@@ -76,6 +76,13 @@ userRoutes.get("/feed", userAuth, async (req, res) => {
 
     const loginUser = req.user;
 
+    const page = parseInt(req.query.page) || 1;
+    let limit = parseInt(req.query.limit) || 10;
+    limit = limit > 50 ? 50 : limit
+
+    const skip = (page-1)*limit
+
+
     const connectionRequestData = await connectionRequest
       .find({
         $or: [{ fromUserId: loginUser._id }, { toUserId: loginUser._id }],
@@ -100,7 +107,7 @@ userRoutes.get("/feed", userAuth, async (req, res) => {
         { _id: { $nin: Array.from(uniqueIds) } },
         { _id: { $ne: loginUser._id } },
       ],
-    }).select(SAFE_USER_DATA);
+    }).select(SAFE_USER_DATA).skip(skip).limit(limit);
 
     res.json({ feed: hideProfileData });
 

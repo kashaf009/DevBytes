@@ -12,7 +12,7 @@ profileRoutes.get("/profile/view", userAuth, async (req, res) => {
   try {
     const user = req.user;
 
-    res.send("profile of:" + user);
+        res.json(user);
   } catch (error) {
     res.status(404).send("Error:" + error.message);
   }

@@ -109,7 +109,7 @@ userRoutes.get("/feed", userAuth, async (req, res) => {
       ],
     }).select(SAFE_USER_DATA).skip(skip).limit(limit);
 
-    res.json({ feed: hideProfileData });
+    res.json( hideProfileData );
 
 
   } catch (error) {

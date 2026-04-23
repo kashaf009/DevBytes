@@ -73,10 +73,10 @@ authRoutes.post("/login", async (req, res) => {
 
       res.send(verifiedUser);
     } else {
-      throw new Error("Invalid");
+      return res.status(401).json({ error: "Invalid credential" });
     }
   } catch (error) {
-    res.status(404).send("Error:" + error.message);
+    res.status(404).json({ error: error.message });
   }
 });
 
@@ -86,7 +86,7 @@ authRoutes.post("/logout", async (req, res) => {
     res.cookie("token", null, { expires: new Date(Date.now()) });
     res.send("logout successful");
   } catch (error) {
-    res.status(404).send("Error:" + error.message);
+    res.status(404).json({ error: error.message });
   }
 });
 

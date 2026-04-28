@@ -35,8 +35,14 @@ authRoutes.post("/signup", async (req, res) => {
         throw new Error("about should be in less than 60 words");
       }
       // save user
-      await User.save();
-      res.send("user added successfully");
+      const savedUser = await User.save();
+      // create jwt token
+       const token = await savedUser.getJWT();
+      // pass token in cookie
+
+      res.cookie("token", token);
+
+      res.json({ message: "user added successfully", data: savedUser });
     }
   } catch (error) {
     if (error.code === 11000) {

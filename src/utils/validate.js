@@ -26,6 +26,7 @@ const verifyUserEdit = (req) => {
     "skills",
     "photoUrl",
     "about",
+    "gender",
   ];
 
   const allowedEdit = Object.keys(req.body).every((key) =>

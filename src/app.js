@@ -8,7 +8,10 @@ import { profileRoutes } from "./routes/profile.js";
 import { requestRoutes } from "./routes/request.js";
 import { userRoutes } from "./routes/user.js";
 import cors from "cors";
+import dotenv from "dotenv";
 
+
+dotenv.config();
 
 
 const App = express();

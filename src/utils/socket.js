@@ -1,4 +1,4 @@
-import { Socket } from "socket.io";
+import { Server } from "socket.io";
 
 const initilizeSocket = (server) => {
   const io = new Server(server, {

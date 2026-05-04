@@ -9,36 +9,37 @@ import { requestRoutes } from "./routes/request.js";
 import { userRoutes } from "./routes/user.js";
 import cors from "cors";
 import dotenv from "dotenv";
-
+import http from "http";
+import initilizeSocket from "./utils/socket.js";
 
 dotenv.config();
 
-
 const App = express();
 
-App.use(cors({
-  origin: "http://localhost:5173",
-  credentials: true,
-}));
+App.use(
+  cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+  }),
+);
 // parsers
 App.use(express.json());
 App.use(cookieParser());
-
 
 // routes
 App.use("/", authRoutes);
 App.use("/", profileRoutes);
 App.use("/", requestRoutes);
-App.use("/", userRoutes)
+App.use("/", userRoutes);
 
-
-
+const server = http.createServer(App);
+initilizeSocket(server);
 
 
 connectDB()
   .then(() => {
     console.log("successfully connected to database");
-    App.listen(7777, () => {
+    server.listen(7777, () => {
       console.log("successfully listened to port no. 7777");
     });
   })

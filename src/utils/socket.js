@@ -10,7 +10,7 @@ const initilizeSocket = (server) => {
   io.on("connection", (socket) => {
     socket.on("joinChat", ({firstName, loginUserId, targetUserId}) => {
       const roomId = [loginUserId, targetUserId].sort().join("_");
-      console.log( firstName + " joined : " +roomId);
+      // console.log( firstName + " joined : " +roomId);
       
       socket.join(roomId);
     });

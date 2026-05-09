@@ -1,5 +1,5 @@
 import { Server } from "socket.io";
-import chat from "../models/chat";
+import chat from "../models/chat.js";
 
 const initilizeSocket = (server) => {
   const io = new Server(server, {

@@ -11,6 +11,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import http from "http";
 import initilizeSocket from "./utils/socket.js";
+import chatRoute from "./routes/chat.js";
 
 dotenv.config();
 
@@ -31,6 +32,7 @@ App.use("/", authRoutes);
 App.use("/", profileRoutes);
 App.use("/", requestRoutes);
 App.use("/", userRoutes);
+App.use("/", chatRoute);
 
 const server = http.createServer(App);
 initilizeSocket(server);

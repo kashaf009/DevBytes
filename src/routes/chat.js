@@ -8,12 +8,12 @@ const chatRoute = express.Router();
 chatRoute.get("/chat/:targetUserId", userAuth, async (req, res) => {
   try {
     const loginUserId = req.user._id;
-    const  targetUserId  = req.params;
+    const {targetUserId}  = req.params;
 
     let chatid =await chat.findOne({
       participants: { $all:[loginUserId, targetUserId] },
     }).populate({
-        path:"message.senderId",
+        path:"messages.sender",
         select:"firstName lastName"
 
     });
@@ -24,7 +24,7 @@ chatRoute.get("/chat/:targetUserId", userAuth, async (req, res) => {
         })
         await chatid.save()
     }
-    
+
     res.json(chatid)
 
   } catch (error) {

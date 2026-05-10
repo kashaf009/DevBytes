@@ -14,7 +14,7 @@ chatRoute.get("/chat/:targetUserId", userAuth, async (req, res) => {
       participants: { $all:[loginUserId, targetUserId] },
     }).populate({
         path:"messages.sender",
-        select:"firstName lastName"
+        select:"firstName lastName photoUrl"
 
     });
     if (!chatid) {

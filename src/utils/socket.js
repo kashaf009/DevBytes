@@ -16,7 +16,7 @@ const initilizeSocket = (server) => {
       socket.join(roomId);
     });
 
-    socket.on("sendMessage",async ({firstName,loginUserId,photoUrl,targetUserId,text}) => {
+    socket.on("sendMessage",async ({firstName,lastName,loginUserId,photoUrl,targetUserId,text}) => {
 
  
       // console.log(firstName +" : "+ text);
@@ -43,7 +43,7 @@ const initilizeSocket = (server) => {
         
         await Chat.save()
 
-      io.to(roomId).emit("messageRecieved",{firstName,text,photoUrl})
+      io.to(roomId).emit("messageRecieved",{firstName,lastName,text,photoUrl})
 
       } catch (error) {
         console.log(error);

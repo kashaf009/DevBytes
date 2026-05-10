@@ -80,28 +80,6 @@ This architecture helps in:
 
 ---
 
-# 📂 Folder Structure
-
-```bash
-backend/
-│
-├── src/
-│   ├── config/
-│   ├── controllers/
-│   ├── middleware/
-│   ├── models/
-│   ├── routes/
-│   ├── services/
-│   ├── socket/
-│   ├── utils/
-│   └── app.js
-│
-├── package.json
-└── README.md
-```
-
----
-
 # 🔥 API Endpoints
 
 ## 🔑 Authentication APIs
@@ -179,41 +157,6 @@ While building DevBytes backend, I learned:
 
 ---
 
-# 🚀 Installation
-
-## Clone Repository
-
-```bash
-git clone https://github.com/your-username/devbytes-backend.git
-```
-
----
-
-## Install Dependencies
-
-```bash
-npm install
-```
-
----
-
-## Create `.env` File
-
-```env
-PORT=5000
-MONGO_URI=your_mongodb_uri
-JWT_SECRET=your_secret
-```
-
----
-
-## Run Server
-
-```bash
-npm run dev
-```
-
----
 
 # ⭐ Support
 
